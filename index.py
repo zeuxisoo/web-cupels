@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import optparse
 from yata.crawler import Crawler
 from yata.model import Flight
@@ -22,6 +23,12 @@ if __name__ == "__main__":
     if options.dpport and options.arport and options.dpdate and options.ardate and options.cmpid and options.b2cpin:
         Crawler(options).start()
     elif options.init:
-        Flight.create_table()
+        from peewee import OperationalError
+
+        try:
+            Flight.create_table()
+            print("Success: database created")
+        except OperationalError as e:
+            print("Error: {0}".format(e))
     else:
         parser.print_help()
