@@ -3,9 +3,12 @@
 
 import optparse
 from yata.crawler import Crawler
+from yata.model import Flight
 
 if __name__ == "__main__":
     parser = optparse.OptionParser(usage="Usage: %prog [options]")
+
+    parser.add_option("--init", action="store_true", dest="init", help="init crawler")
 
     parser.add_option("--dpport", action="store", dest="dpport", help="from location")
     parser.add_option("--arport", action="store", dest="arport", help="to location")
@@ -18,5 +21,7 @@ if __name__ == "__main__":
 
     if options.dpport and options.arport and options.dpdate and options.ardate and options.cmpid and options.b2cpin:
         Crawler(options).start()
+    elif options.init:
+        Flight.create_table()
     else:
         parser.print_help()

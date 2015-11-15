@@ -5,6 +5,8 @@ import signal
 from multiprocessing import Process
 from time import sleep
 from page import fetch_html, parse_html
+from model import Flight
+from util import price_to_intenger, string_to_datetime
 
 class FlightConsumer(Process):
     def __init__(self, options, date_queue):
@@ -49,6 +51,19 @@ class FlightConsumer(Process):
                 valid_buy_ticket_date_from=row['valid_buy_ticket_date_from'],
                 valid_buy_ticket_date_to=row['valid_buy_ticket_date_to']
             ))
+
+            Flight.create(
+                company_code=row['company_code'],
+                cabin=row['cabin'],
+                ticket_price=price_to_intenger(row['ticket_price']),
+                stay_day_min=row['stay_day_min'],
+                stay_day_max=row['stay_day_max'],
+                valid_date_from=string_to_datetime(row['valid_date_from']),
+                valid_date_to=string_to_datetime(row['valid_date_to']),
+                valid_buy_ticket_date_from=string_to_datetime(row['valid_buy_ticket_date_from']),
+                valid_buy_ticket_date_to=string_to_datetime(row['valid_buy_ticket_date_to']),
+                flight_info_link=row['flight_info_link']
+            )
 
         self.date_queue.task_done()
 
