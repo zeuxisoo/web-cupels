@@ -48,7 +48,7 @@ return [
 
         'sqlite' => [
             'driver'   => 'sqlite',
-            'database' => storage_path('database.sqlite'),
+            'database' => dirname(dirname(dirname(__FILE__))).'/yata/storage/flight.db',
             'prefix'   => '',
         ],
 

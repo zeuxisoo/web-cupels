@@ -11,6 +11,14 @@
 |
 */
 
+$api = app('Dingo\Api\Routing\Router');
+
 Route::get('/', function () {
     return view('index');
+});
+
+$api->version('v1', function($api) {
+    $api->group(['namespace' => 'App\Api\Version1\Controllers', 'prefix' => 'flight'], function ($api) {
+        $api->post('all', ['as' => 'api.flight.all', 'uses' => 'FlightController@all']);
+    });
 });
