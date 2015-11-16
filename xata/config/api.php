@@ -155,7 +155,7 @@ return [
     */
 
     'auth' => [
-
+        'custom' => 'App\Api\Version1\Providers\JWTWithoutUserProvider'
     ],
 
     /*
