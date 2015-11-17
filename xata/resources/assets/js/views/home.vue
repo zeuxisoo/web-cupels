@@ -9,11 +9,11 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-addon">$</div>
-                                    <input type="text" name="price" class="form-control" placeholder="1230">
+                                    <input type="number" name="price" class="form-control" placeholder="1230" v-model="price">
                                     <div class="input-group-addon">.00</div>
                                 </div>
                             </div>
-                            <button class="btn btn-primary">Search</button>
+                            <button class="btn btn-primary" v-on:click="search">Search</button>
                         </div>
                     </div>
                 </div>
@@ -78,8 +78,29 @@
 </template>
 
 <script>
-export default {
+import Api from '../api'
+import Store from '../store'
 
+export default {
+    data() {
+        return {
+            price: 0
+        }
+    },
+
+    ready() {
+        this.$api.sign().success((response, status, request) => {
+            Store.set('auth-token', response.token);
+        })
+    },
+
+    methods: {
+        search() {
+            this.$api.flight(1).success((response, status, request) => {
+                console.log(response);
+            });
+        }
+    }
 }
 </script>
 
