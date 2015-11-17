@@ -8,6 +8,8 @@ class FlightTransformer extends TransformerAbstract {
 
     public function transform(Flight $flight) {
         return [
+            'departure_port'             => $flight->departure_port,
+            'arrival_port'               => $flight->arrival_port,
             'company_code'               => $flight->company_code,
             'cabin'                      => $flight->cabin,
             'ticket_price'               => $flight->ticket_price,
