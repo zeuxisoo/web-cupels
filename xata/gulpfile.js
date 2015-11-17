@@ -52,6 +52,7 @@ Elixir.extend('webpack', function(options) {
 
         return deferred.promise;
     })
+    .watch(config.get('assets.js.folder') + '/*.js')
     .watch(config.get('assets.js.folder') + '/**/*.js')
     .watch(config.get('assets.js.folder') + '/**/*.scss')
     .watch(config.get('assets.js.folder') + '/**/*.html')
@@ -78,6 +79,10 @@ Elixir(function(mix) {
                 loaders: [{
                     test: require.resolve('jquery'),
                     loader: 'expose?jQuery'
+                }, {
+                    test: /\.js$/,
+                    loader: "babel-loader?sourceMap",
+                    exclude: /node_modules/
                 }, {
                     test: /\.css$/,
                     loader: "style-loader!css-loader?sourceMap!postcss-loader?sourceMap"
@@ -109,6 +114,10 @@ Elixir(function(mix) {
             },
             vue: {
                 css: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!postcss-loader")
+            },
+            babel: {
+                presets: ['es2015'],
+                plugins: ['transform-runtime']
             },
             plugins: [
                 new ExtractTextPlugin('bundle-[hash].css', { disable: false }),

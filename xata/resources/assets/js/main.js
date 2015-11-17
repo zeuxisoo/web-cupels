@@ -1,6 +1,7 @@
-var Vue = require('vue'),
-    VueRouter = require('vue-router'),
-    VueResource = require('vue-resource');
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import VueResource from 'vue-resource'
+import Api from './api'
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -22,7 +23,14 @@ Router.map({
     }
 });
 
-// Resource
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name=csrf-token]").content;
+
+Object.defineProperties(Vue.prototype, {
+    $api: {
+        get: function() {
+            return new Api(this);
+        }
+    },
+});
 
 Router.start(Vue.extend(require('./views/app.vue')), '#app');
