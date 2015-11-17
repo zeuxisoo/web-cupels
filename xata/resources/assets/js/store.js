@@ -1,20 +1,18 @@
-import util from 'util'
+export default class Store {
 
-class Store {
-
-    set(key, value) {
-        if (util.isFunction(value) === true) {
+    static set(key, value) {
+        if (Object.prototype.toString.call(value) === '[object Function]') {
             throw new TypeError('Cannot store function')
         }
 
-        if (util.isObject(value) === true) {
+        if (Object.prototype.toString.call(value) === '[object Object]') {
             value = JSON.stringify(value);
         }
 
         sessionStorage[key] = value
     }
 
-    get(key) {
+    static get(key) {
         let value = sessionStorage[key]
 
         try{
@@ -24,14 +22,12 @@ class Store {
         }
     }
 
-    remove(key) {
+    static remove(key) {
         delete sessionStorage[key]
     }
 
-    clear() {
+    static clear() {
         sessionStorage.clear()
     }
 
 }
-
-export default new Store

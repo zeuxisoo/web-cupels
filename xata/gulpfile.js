@@ -81,8 +81,12 @@ Elixir(function(mix) {
                     loader: 'expose?jQuery'
                 }, {
                     test: /\.js$/,
-                    loader: "babel-loader?sourceMap",
-                    exclude: /node_modules/
+                    loader: "babel-loader",
+                    exclude: /node_modules/,
+                    query: {
+                        presets: ['es2015'],
+                        plugins: ['transform-runtime']
+                    }
                 }, {
                     test: /\.css$/,
                     loader: "style-loader!css-loader?sourceMap!postcss-loader?sourceMap"
