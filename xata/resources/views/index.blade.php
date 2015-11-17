@@ -6,11 +6,11 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Xata - Cupels</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
-<link rel="stylesheet" href="{{ elixir('assets/bundle.css') }}">
+<link rel="stylesheet" href="{{ elixir('main.css') }}">
 </head>
 <body>
 <div id="app"></div>
-<script src="{{ elixir('assets/bundle.js') }}"></script>
+<script src="{{ elixir('main.js') }}"></script>
 
 @if ( Config::get('app.debug') )
     <script type="text/javascript">

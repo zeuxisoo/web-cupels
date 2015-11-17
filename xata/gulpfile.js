@@ -7,6 +7,7 @@ var Elixir = require('laravel-elixir'),
     livereload = require('laravel-elixir-livereload'),
     Q = require('q'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    WebpackManifestPlugin = require('webpack-manifest-plugin'),
     WebpackNotifierPlugin = require('webpack-notifier');
 
 var Task = Elixir.Task;
@@ -60,7 +61,6 @@ Elixir.extend('webpack', function(options) {
 Elixir(function(mix) {
     mix
         .clean([
-            'public/assets',
             'public/build',
         ])
         .webpack({
@@ -68,9 +68,9 @@ Elixir(function(mix) {
                 './resources/assets/js/main.js',
             ],
             output: {
-                path      : __dirname + '/public/assets',
+                path      : __dirname + '/public/build',
                 publicPath: '/build/',
-                filename  : "bundle.js",
+                filename  : "bundle-[hash].js",
                 pathinfo  : true
             },
             devtool: "#source-map",
@@ -111,13 +111,12 @@ Elixir(function(mix) {
                 css: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!postcss-loader")
             },
             plugins: [
-                new ExtractTextPlugin('bundle.css', { disable: false }),
+                new ExtractTextPlugin('bundle-[hash].css', { disable: false }),
                 new WebpackNotifierPlugin(),
+                new WebpackManifestPlugin({
+                    fileName: 'rev-manifest.json',
+                }),
             ],
         })
-        .version([
-            'public/assets/bundle.css',
-            'public/assets/bundle.js',
-        ])
         .livereload()
 });
