@@ -54,6 +54,8 @@ class FlightConsumer(Process):
             ))
 
             Flight.insert(
+                departure_port=dpport,
+                arrival_port=arport,
                 company_code=row['company_code'],
                 cabin=row['cabin'],
                 ticket_price=price_to_intenger(row['ticket_price']),

@@ -21,6 +21,8 @@ class BaseModel(Model):
         database = db
 
 class Flight(BaseModel):
+    departure_port             = CharField(max_length=10, null=True, index=True)
+    arrival_port               = CharField(max_length=10, null=True, index=True)
     company_code               = CharField(max_length=5, null=True, index=True)
     cabin                      = CharField(max_length=5, null=True)
     ticket_price               = IntegerField(null=True, index=True)
