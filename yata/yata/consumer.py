@@ -52,7 +52,7 @@ class FlightConsumer(Process):
                 valid_buy_ticket_date_to=row['valid_buy_ticket_date_to']
             ))
 
-            Flight.create(
+            Flight.insert(
                 company_code=row['company_code'],
                 cabin=row['cabin'],
                 ticket_price=price_to_intenger(row['ticket_price']),
@@ -63,7 +63,7 @@ class FlightConsumer(Process):
                 valid_buy_ticket_date_from=string_to_datetime(row['valid_buy_ticket_date_from']),
                 valid_buy_ticket_date_to=string_to_datetime(row['valid_buy_ticket_date_to']),
                 flight_info_link=row['flight_info_link']
-            )
+            ).upsert(upsert=True).execute()
 
         self.date_queue.task_done()
 
