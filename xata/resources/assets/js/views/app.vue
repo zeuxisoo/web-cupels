@@ -1,5 +1,7 @@
 <template>
     <div class="container">
+        <h3>Yata</h3>
+        <hr>
         <router-view></router-view>
     </div>
 </template>
@@ -15,7 +17,4 @@ export default {
 </script>
 
 <style>
-body {
-    padding-top: 50px;
-}
 </style>
