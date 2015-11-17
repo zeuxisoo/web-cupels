@@ -12,7 +12,7 @@ class Flight extends Model {
         'company_code', 'cabin', 'ticket_price', 'stay_day_min', 'stay_day_max',
         'valid_date_from', 'valid_date_to',
         'valid_buy_ticket_date_from', 'valid_buy_ticket_date_to',
-        'flight_info_link'
+        'flight_info_link', 'flight_info_link_cond_code'
     ];
 
 }
