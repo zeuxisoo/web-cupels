@@ -3,6 +3,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+from urlparse import parse_qs
 
 def fetch_html(dpport, arport, dpdate, ardate, cmpid, b2cpin):
     dpdate_parts = dpdate.split('/')
@@ -58,6 +59,8 @@ def parse_html(html):
             valid_buy_ticket_date_to   = company.select("td")[11].getText() # 出票期限 - 至
             flight_info_link           = company.select("td")[14].select("a")[0]['href'] # 出票期限 - 至
 
+            flight_info_link_cond_code = parse_qs(flight_info_link)['cond_code'][0]
+
             row_list.append({
                 'company_code'               : company_code,
                 'cabin'                      : cabin,
@@ -68,7 +71,8 @@ def parse_html(html):
                 'valid_date_to'              : valid_date_to,
                 'valid_buy_ticket_date_from' : valid_buy_ticket_date_from,
                 'valid_buy_ticket_date_to'   : valid_buy_ticket_date_to,
-                'flight_info_link'           : flight_info_link
+                'flight_info_link'           : flight_info_link,
+                'flight_info_link_cond_code' : flight_info_link_cond_code
             })
 
         row_count = row_count + 1

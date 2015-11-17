@@ -21,15 +21,16 @@ class BaseModel(Model):
         database = db
 
 class Flight(BaseModel):
-    company_code               = CharField(max_length=5, null=True)
+    company_code               = CharField(max_length=5, null=True, index=True)
     cabin                      = CharField(max_length=5, null=True)
-    ticket_price               = IntegerField(null=True)
+    ticket_price               = IntegerField(null=True, index=True)
     stay_day_min               = CharField(max_length=5, null=True)
     stay_day_max               = CharField(max_length=5, null=True)
-    valid_date_from            = NoTZDateTimeField()
-    valid_date_to              = NoTZDateTimeField()
-    valid_buy_ticket_date_from = NoTZDateTimeField()
-    valid_buy_ticket_date_to   = NoTZDateTimeField()
+    valid_date_from            = NoTZDateTimeField(index=True)
+    valid_date_to              = NoTZDateTimeField(index=True)
+    valid_buy_ticket_date_from = NoTZDateTimeField(index=True)
+    valid_buy_ticket_date_to   = NoTZDateTimeField(index=True)
     flight_info_link           = TextField(null=True)
+    flight_info_link_cond_code = CharField(max_length=20, null=True)
     created_at                 = NoTZDateTimeField(default=lambda: string_to_datetime(datetime.now().strftime('%d/%m/%Y')))
     update_at                  = NoTZDateTimeField(default=lambda: string_to_datetime(datetime.now().strftime('%d/%m/%Y')))
