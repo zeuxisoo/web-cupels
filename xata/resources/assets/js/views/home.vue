@@ -29,7 +29,7 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default" v-for="flight in flights">
+                <div class="panel panel-default fadeInUp animated" v-for="flight in flights">
                     <div class="panel-heading">
                         <label class="label label-info">{{ flight.departure_port }}</label>
                         <i class="glyphicon glyphicon-arrow-right"></i>
