@@ -39,11 +39,13 @@ class FlightConsumer(Process):
         print("{0} ~ {1}".format(dpdate, ardate))
         print("=========" * 5)
 
+        insert_rows = []
+
         for row in rows:
-            print("{company_code:2s} {cabin:1s} {ticket_price:>8s} ({stay_day_min:>3s} ~ {stay_day_max:>3s}) ({valid_date_from:>10s} ~ {valid_date_to:>10s}) ({valid_buy_ticket_date_from:>10s} ~ {valid_buy_ticket_date_to:>10s}) {flight_info_link_cond_code:>15s}".format(
+            print("{company_code:4s} {cabin:1s} {ticket_price:>8s} ({stay_day_min:>3s} ~ {stay_day_max:>3s}) ({valid_date_from:>10s} ~ {valid_date_to:>10s}) ({valid_buy_ticket_date_from:>10s} ~ {valid_buy_ticket_date_to:>10s}) {flight_info_link_cond_code:>15s}".format(
                 company_code=row['company_code'],
                 cabin=row['cabin'],
-                ticket_price=row['ticket_price'],
+                ticket_price=price_to_intenger(row['ticket_price']),
                 stay_day_min=row['stay_day_min'],
                 stay_day_max=row['stay_day_max'],
                 valid_date_from=row['valid_date_from'],
@@ -53,7 +55,7 @@ class FlightConsumer(Process):
                 flight_info_link_cond_code=row['flight_info_link_cond_code']
             ))
 
-            Flight.insert(
+            insert_rows.append(dict(
                 departure_port=dpport,
                 arrival_port=arport,
                 company_code=row['company_code'],
@@ -67,7 +69,11 @@ class FlightConsumer(Process):
                 valid_buy_ticket_date_to=string_to_datetime(row['valid_buy_ticket_date_to']),
                 flight_info_link=row['flight_info_link'],
                 flight_info_link_cond_code=row['flight_info_link_cond_code']
-            ).upsert(upsert=True).execute()
+            ))
+
+        Flight.insert_many(insert_rows).upsert(upsert=True).execute()
+
+        sleep(2)
 
         self.date_queue.task_done()
 
