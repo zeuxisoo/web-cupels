@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
 import Api from '../api'
 import Store from '../store'
 
@@ -108,23 +109,38 @@ export default {
             this.$http.headers.common["Authorization"] = "bearer " + token;
         },
 
-        fetchFlights(data) {
-            this.$api.flight(data).success((response, status, request) => {
-                if (data.page === 1) {
-                    this.flights = response.data;
-                }else{
-                    this.flights = this.flights.concat(response.data);
-                }
+        alertDanger(message) {
+            swal("Ooops !!!", message, "warning");
+        },
 
-                this.pagination = response.meta.pagination;
-            });
+        errorHandler(response, status, request) {
+            if (response.errors) {
+                Object.keys(response.errors).forEach((key) => {
+                    this.alertDanger(response.errors[key].shift());
+                });
+            }
+        },
+
+        fetchFlights(data) {
+            this.$api
+                .flight(data)
+                .success((response, status, request) => {
+                    if (data.page === 1) {
+                        this.flights = response.data;
+                    }else{
+                        this.flights = this.flights.concat(response.data);
+                    }
+
+                    this.pagination = response.meta.pagination;
+                })
+                .error(this.errorHandler);
         },
 
         search() {
             if (/^[0-9]+$/.test(this.price) === false) {
-                alert('Please enter number');
+                this.alertDanger('Please enter number');
             }else if (this.price <= 0) {
-                alert('Please input positive integer');
+                this.alertDanger('Please input positive integer');
             }else{
                 this.fetchFlights({
                     page : 1,
@@ -135,9 +151,9 @@ export default {
 
         loadMore() {
             if (/^[0-9]+$/.test(this.price) === false) {
-                alert('Please enter number');
+                this.alertDanger('Please enter number');
             }else if (this.price <= 0) {
-                alert('Please input positive integer');
+                this.alertDanger('Please input positive integer');
             }else{
                 this.fetchFlights({
                     page : this.pagination.current_page + 1,
