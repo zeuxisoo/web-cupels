@@ -25,7 +25,8 @@
                 <div class="panel panel-default" v-if="hasFlights === false">
                     <div class="panel-heading">Result</div>
                     <div class="panel-body">
-                        Please make search first :(
+                        <div v-if="isFirst === true">Please make search first :(</div>
+                        <div v-if="isFirst === false">Cannot found related price result :(</div>
                     </div>
                 </div>
 
@@ -91,6 +92,7 @@ import Store from '../store'
 export default {
     data() {
         return {
+            isFirst   : true,
             error     : false,
             price     : 0,
             flights   : [],
@@ -147,6 +149,7 @@ export default {
                         this.flights = this.flights.concat(response.data);
                     }
 
+                    this.isFirst    = false;
                     this.pagination = response.meta.pagination;
                 })
                 .error(this.errorHandler);
