@@ -12,9 +12,6 @@ var Router = new VueRouter({
 });
 
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name=csrf-token]").content;
-Vue.http.options.error = (data, status, request) => {
-
-};
 
 Router.map({
     '/': {
