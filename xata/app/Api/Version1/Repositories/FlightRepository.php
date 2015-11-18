@@ -15,7 +15,8 @@ class FlightRepository extends ApiRepository {
         return $this->flight
                 ->where('ticket_price', '>=', $input['price'])
                 ->betweenValidBuyTicketDate(Carbon::now())
-                ->orderBy('price', 'desc')
+                ->groupBy('flight_info_link_cond_code')
+                ->orderBy('ticket_price', 'asc')
                 ->paginate();
     }
 
