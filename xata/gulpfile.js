@@ -11,6 +11,20 @@ var Elixir = require('laravel-elixir'),
     WebpackNotifierPlugin = require('webpack-notifier');
 
 var Task = Elixir.Task;
+var plugins = []
+var devtools = '#source-map';
+
+if (process.env.NODE_ENV === 'production') {
+    plugins = [
+        new webpack.optimize.UglifyJsPlugin({
+            output: {
+                comments: false
+            }
+        }),
+    ];
+
+    devtools = '#hidden-source-map';
+}
 
 Elixir.extend('clean', function(options) {
     new Task('clean', function() {
@@ -74,7 +88,7 @@ Elixir(function(mix) {
                 filename  : "bundle-[hash].js",
                 pathinfo  : true
             },
-            devtool: "#source-map",
+            devtool: devtools,
             module: {
                 loaders: [{
                     test: require.resolve('jquery'),
@@ -128,8 +142,8 @@ Elixir(function(mix) {
                 new WebpackNotifierPlugin(),
                 new WebpackManifestPlugin({
                     fileName: 'rev-manifest.json',
-                }),
-            ],
+                })
+            ].concat(plugins),
         })
         .livereload()
 });
