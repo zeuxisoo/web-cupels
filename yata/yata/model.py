@@ -3,13 +3,12 @@
 
 from os.path import realpath, join, dirname, abspath
 from datetime import datetime
-from peewee import SqliteDatabase, Model
+from peewee import MySQLDatabase, Model
 from peewee import CharField, IntegerField, DateTimeField, TextField
 from util import string_to_datetime
 
-database_file = realpath(join(dirname(abspath(__file__)), '../storage/flight.db'))
+db = MySQLDatabase('cupels', user='root', charset='utf8mb4')
 
-db = SqliteDatabase(database_file)
 db.connect()
 
 class NoTZDateTimeField(DateTimeField):

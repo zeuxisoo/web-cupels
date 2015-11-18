@@ -71,7 +71,7 @@ class FlightConsumer(Process):
                 flight_info_link_cond_code=row['flight_info_link_cond_code']
             ))
 
-        Flight.insert_many(insert_rows).upsert(upsert=True).execute()
+        Flight.insert_many(insert_rows).execute()
 
         sleep(2)
 
