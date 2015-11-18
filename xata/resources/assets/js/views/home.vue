@@ -70,7 +70,7 @@
 
         <div class="row" v-if="hasLoadMore">
             <div class="col-xs-12">
-                <button class="btn btn-default full-width">- Load more -</button>
+                <button class="btn btn-default full-width" v-on:click="loadMore">- Load more -</button>
             </div>
         </div>
     </div>
@@ -108,11 +108,42 @@ export default {
             this.$http.headers.common["Authorization"] = "bearer " + token;
         },
 
-        search() {
-            this.$api.flight(1).success((response, status, request) => {
-                this.flights    = response.data,
+        fetchFlights(data) {
+            this.$api.flight(data).success((response, status, request) => {
+                if (data.page === 1) {
+                    this.flights = response.data;
+                }else{
+                    this.flights = this.flights.concat(response.data);
+                }
+
                 this.pagination = response.meta.pagination;
             });
+        },
+
+        search() {
+            if (/^[0-9]+$/.test(this.price) === false) {
+                alert('Please enter number');
+            }else if (this.price <= 0) {
+                alert('Please input positive integer');
+            }else{
+                this.fetchFlights({
+                    page : 1,
+                    price: this.price
+                });
+            }
+        },
+
+        loadMore() {
+            if (/^[0-9]+$/.test(this.price) === false) {
+                alert('Please enter number');
+            }else if (this.price <= 0) {
+                alert('Please input positive integer');
+            }else{
+                this.fetchFlights({
+                    page : this.pagination.current_page + 1,
+                    price: this.price
+                });
+            }
         }
     }
 }

@@ -12,10 +12,8 @@ export default class Api {
         return this.vue.$http.get(this.apiUrl('/auth/sign'))
     }
 
-    flight(page) {
-        return this.vue.$http.get(this.apiUrl('/flight/all'), {
-            page: page
-        })
+    flight(data) {
+        return this.vue.$http.get(this.apiUrl('/flight/all'), data)
     }
 
 }
