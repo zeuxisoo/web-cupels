@@ -21,4 +21,12 @@ class Flight extends Model {
         'valid_buy_ticket_date_from', 'valid_buy_ticket_date_to',
     ];
 
+    public function scopeBetweenValidBuyTicketDate($query, $ticket_date) {
+        return $query->where(function($query) use ($ticket_date) {
+                    $query
+                        ->where('valid_buy_ticket_date_from', '<=', $ticket_date)
+                        ->where('valid_buy_ticket_date_to', '>=', $ticket_date);
+                });
+    }
+
 }
