@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h3>Yata</h3>
+        <h3>Xata</h3>
         <hr>
         <router-view></router-view>
     </div>
