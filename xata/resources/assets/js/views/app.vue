@@ -11,6 +11,7 @@ require('jquery');
 require('bootstrap');
 require('bootstrap/less/bootstrap.less');
 require('sweetalert/dist/sweetalert.css');
+require('animate.css/animate.css');
 
 export default {
 

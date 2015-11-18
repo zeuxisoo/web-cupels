@@ -2,7 +2,7 @@
     <div id="home">
         <div class="row">
             <div class="col-xs-12">
-                <div class="panel panel-default">
+                <div class="panel panel-default" v-bind:class="{ 'shake': error, 'animated': error }">
                     <div class="panel-heading">Search</div>
                     <div class="panel-body">
                         <div class="form-inline">
@@ -22,6 +22,13 @@
 
         <div class="row">
             <div class="col-xs-12">
+                <div class="panel panel-default" v-if="hasFlights === false">
+                    <div class="panel-heading">Result</div>
+                    <div class="panel-body">
+                        Please make search first :(
+                    </div>
+                </div>
+
                 <div class="panel panel-default" v-for="flight in flights">
                     <div class="panel-heading">
                         <label class="label label-info">{{ flight.departure_port }}</label>
@@ -84,6 +91,7 @@ import Store from '../store'
 export default {
     data() {
         return {
+            error     : false,
             price     : 0,
             flights   : [],
             pagination: {}
@@ -99,6 +107,10 @@ export default {
     },
 
     computed: {
+        hasFlights() {
+            return this.flights.length > 0;
+        },
+
         hasLoadMore() {
             return this.pagination.current_page < this.pagination.total_pages;
         }
@@ -111,12 +123,16 @@ export default {
 
         alertDanger(message) {
             swal("Ooops !!!", message, "warning");
+
+            this.error = true;
+            setTimeout(() => this.error = false, 1000);
         },
 
         errorHandler(response, status, request) {
             if (response.errors) {
                 Object.keys(response.errors).forEach((key) => {
                     this.alertDanger(response.errors[key].shift());
+                    return;
                 });
             }
         },

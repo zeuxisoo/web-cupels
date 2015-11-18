@@ -1,6 +1,7 @@
 {
   "private": true,
   "dependencies": {
+    "animate.css": "^3.4.0",
     "babel-core": "^6.1.21",
     "babel-loader": "^6.1.0",
     "babel-plugin-transform-runtime": "^6.1.18",
