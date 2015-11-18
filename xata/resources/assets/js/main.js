@@ -11,6 +11,8 @@ var Router = new VueRouter({
     saveScrollPosition: true
 });
 
+Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name=csrf-token]").content;
+
 Router.map({
     '/': {
         name     : 'home',
@@ -22,8 +24,6 @@ Router.map({
         component: require('./views/not-found.vue')
     }
 });
-
-Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name=csrf-token]").content;
 
 Object.defineProperties(Vue.prototype, {
     $api: {

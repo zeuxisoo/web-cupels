@@ -16,4 +16,9 @@ class Flight extends Model {
         'flight_info_link', 'flight_info_link_cond_code'
     ];
 
+    protected $dates = [
+        'valid_date_from', 'valid_date_to',
+        'valid_buy_ticket_date_from', 'valid_buy_ticket_date_to',
+    ];
+
 }

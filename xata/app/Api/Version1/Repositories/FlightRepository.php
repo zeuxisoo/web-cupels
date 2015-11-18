@@ -11,7 +11,7 @@ class FlightRepository extends ApiRepository {
     }
 
     public function all() {
-        return $this->flight->all();
+        return $this->flight->orderBy('price', 'desc')->paginate();
     }
 
 }

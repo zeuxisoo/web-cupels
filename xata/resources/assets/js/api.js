@@ -13,7 +13,9 @@ export default class Api {
     }
 
     flight(page) {
-        return this.vue.$http.get(this.apiUrl('/flight/all'))
+        return this.vue.$http.get(this.apiUrl('/flight/all'), {
+            page: page
+        })
     }
 
 }

@@ -22,44 +22,44 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <div class="panel panel-default">
+                <div class="panel panel-default" v-for="flight in flights">
                     <div class="panel-heading">
-                        <label class="label label-info">HKD</label>
+                        <label class="label label-info">{{ flight.departure_port }}</label>
                         <i class="glyphicon glyphicon-arrow-right"></i>
-                        <label class="label label-primary">TPE</label>
+                        <label class="label label-primary">{{ flight.arrival_port }}</label>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12 col-md-2 text-center">
                                 <div class="row">成人票價</div>
                                 <div class="row vertical-center">
-                                    <strong>1,240</strong>
+                                    <strong>{{ flight.ticket_price }}</strong>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-10">
                                 <div class="row">
                                     <div class="col-xs-6 col-md-4">航空公司</div>
-                                    <div class="col-xs-6 col-md-2 text-right">HX</div>
+                                    <div class="col-xs-6 col-md-2 text-right">{{ flight.company_code }}</div>
                                     <div class="col-xs-6 col-md-4">客艙類別</div>
-                                    <div class="col-xs-6 col-md-2 text-right">3</div>
+                                    <div class="col-xs-6 col-md-2 text-right">{{ flight.cabin }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-6 col-md-4">停留天數 最短</div>
-                                    <div class="col-xs-6 col-md-2 text-right">1,240</div>
+                                    <div class="col-xs-6 col-md-2 text-right">{{ flight.stay_day_min }}</div>
                                     <div class="col-xs-6 col-md-4">停留天數 最長</div>
-                                    <div class="col-xs-6 col-md-2 text-right">HX</div>
+                                    <div class="col-xs-6 col-md-2 text-right">{{ flight.stay_day_max }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-6 col-md-4">行程有效期 由</div>
-                                    <div class="col-xs-6 col-md-2 text-right">3</div>
+                                    <div class="col-xs-6 col-md-2 text-right">{{ flight.valid_date_from }}</div>
                                     <div class="col-xs-6 col-md-4">行程有效期 至</div>
-                                    <div class="col-xs-6 col-md-2 text-right">1,240</div>
+                                    <div class="col-xs-6 col-md-2 text-right">{{ flight.valid_date_to }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-6 col-md-4">出票期限 由</div>
-                                    <div class="col-xs-6 col-md-2 text-right">HX</div>
+                                    <div class="col-xs-6 col-md-2 text-right">{{ flight.valid_buy_ticket_date_from }}</div>
                                     <div class="col-xs-6 col-md-4">出票期限 至</div>
-                                    <div class="col-xs-6 col-md-2 text-right">3</div>
+                                    <div class="col-xs-6 col-md-2 text-right">{{ flight.valid_buy_ticket_date_to }}</div>
                                 </div>
                             </div>
                         </div>
@@ -68,10 +68,9 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" v-if="hasLoadMore">
             <div class="col-xs-12">
-                <button class="btn btn-default pull-left">Previous</button>
-                <button class="btn btn-default pull-right">Next</button>
+                <button class="btn btn-default full-width">- Load more -</button>
             </div>
         </div>
     </div>
@@ -84,20 +83,35 @@ import Store from '../store'
 export default {
     data() {
         return {
-            price: 0
+            price     : 0,
+            flights   : [],
+            pagination: {}
         }
     },
 
     ready() {
         this.$api.sign().success((response, status, request) => {
             Store.set('auth-token', response.token);
+
+            this.setAuthorization(response.token);
         })
     },
 
+    computed: {
+        hasLoadMore() {
+            return this.pagination.current_page < this.pagination.total_pages;
+        }
+    },
+
     methods: {
+        setAuthorization(token) {
+            this.$http.headers.common["Authorization"] = "bearer " + token;
+        },
+
         search() {
             this.$api.flight(1).success((response, status, request) => {
-                console.log(response);
+                this.flights    = response.data,
+                this.pagination = response.meta.pagination;
             });
         }
     }
@@ -111,5 +125,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.full-width {
+    width: 100%;
 }
 </style>
