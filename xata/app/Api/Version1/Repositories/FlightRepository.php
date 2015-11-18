@@ -10,8 +10,8 @@ class FlightRepository extends ApiRepository {
         $this->flight = $flight;
     }
 
-    public function all() {
-        return $this->flight->orderBy('price', 'desc')->paginate();
+    public function allFlightByPrice($input) {
+        return $this->flight->where('ticket_price', '>=', $input['price'])->orderBy('price', 'desc')->paginate();
     }
 
 }

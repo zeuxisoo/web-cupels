@@ -15,7 +15,8 @@ class FlightController extends ApiController {
     }
 
     public function all(FlightRequest $request) {
-        $flights = $this->flightRepository->all();
+        $input   = $request->all();
+        $flights = $this->flightRepository->allFlightByPrice($input);
 
         return $this->response->paginator($flights, new FlightTransformer);
     }
