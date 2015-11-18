@@ -5,6 +5,7 @@ var Elixir = require('laravel-elixir'),
     del = require('del'),
     vue = require("vue-loader"),
     livereload = require('laravel-elixir-livereload'),
+    discardComments = require('postcss-discard-comments'),
     Q = require('q'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     WebpackManifestPlugin = require('webpack-manifest-plugin'),
@@ -136,6 +137,9 @@ Elixir(function(mix) {
             babel: {
                 presets: ['es2015'],
                 plugins: ['transform-runtime']
+            },
+            postcss: function() {
+                return [discardComments({ removeAll: true })]
             },
             plugins: [
                 new ExtractTextPlugin('bundle-[hash].css', { disable: false }),
