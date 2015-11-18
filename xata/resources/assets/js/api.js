@@ -9,11 +9,11 @@ export default class Api {
     }
 
     sign() {
-        return this.vue.$http.get(this.apiUrl('/auth/sign'))
+        return this.vue.$http.post(this.apiUrl('/auth/sign'))
     }
 
     flight(data) {
-        return this.vue.$http.get(this.apiUrl('/flight/all'), data)
+        return this.vue.$http.post(this.apiUrl('/flight/all'), data)
     }
 
 }

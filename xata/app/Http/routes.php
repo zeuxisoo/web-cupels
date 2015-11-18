@@ -17,10 +17,10 @@ Route::get('/', ['as' => 'home.index', 'uses' => 'HomeController@index']);
 
 $api->version('v1', function($api) {
     $api->group(['namespace' => 'App\Api\Version1\Controllers', 'prefix' => 'auth'], function($api) {
-        $api->get('sign', ['as' => 'api.auth.sign', 'uses' => 'AuthController@sign']);
+        $api->post('sign', ['as' => 'api.auth.sign', 'uses' => 'AuthController@sign']);
     });
 
     $api->group(['namespace' => 'App\Api\Version1\Controllers', 'prefix' => 'flight', 'middleware' => 'api.auth'], function ($api) {
-        $api->get('all', ['as' => 'api.flight.all', 'uses' => 'FlightController@all']);
+        $api->post('all', ['as' => 'api.flight.all', 'uses' => 'FlightController@all']);
     });
 });
