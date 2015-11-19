@@ -108,7 +108,7 @@ Elixir(function(mix) {
                     }
                 }, {
                     test: /\.css$/,
-                    loader: "style-loader!css-loader?sourceMap!postcss-loader?sourceMap"
+                    loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!postcss-loader?sourceMap")
                 }, {
                     test: /\.woff(2)?(\?v=\d+\.\d+\.\d+)?$/,
                     loader: "url-loader?limit=10000&minetype=application/font-woff"
