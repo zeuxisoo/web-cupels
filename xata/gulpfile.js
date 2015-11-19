@@ -43,32 +43,30 @@ Elixir.extend('webpack', function(options) {
     new Task('webpack', function() {
         var deferred = Q.defer();
 
-        gulp.task('webpack', function(callback) {
-            webpack(options, function(err, stats) {
-                if (err) {
-                    deferred.reject(callback());
+        webpack(options, function(err, stats) {
+            if (err) {
+                deferred.reject(err);
 
-                    throw new gutil.PluginError("webpack", err);
-                }else{
-                    gutil.log("[Webpack]", stats.toString({
-                        colors: true,
-                        // hash: false,
-                        // timings: false,
-                        // chunks: false,
-                        // chunkModules: false,
-                        // modules: false,
-                        // children: true,
-                        // version: true,
-                        // cached: false,
-                        // cachedAssets: false,
-                        // reasons: false,
-                        // source: false,
-                        // errorDetails: false
-                    }));
+                throw new gutil.PluginError("webpack", err);
+            }else{
+                gutil.log("[Webpack]", stats.toString({
+                    colors: true,
+                    // hash: false,
+                    // timings: false,
+                    // chunks: false,
+                    // chunkModules: false,
+                    // modules: false,
+                    // children: true,
+                    // version: true,
+                    // cached: false,
+                    // cachedAssets: false,
+                    // reasons: false,
+                    // source: false,
+                    // errorDetails: false
+                }));
 
-                    deferred.resolve(callback());
-                }
-            })
+                deferred.resolve(stats);
+            }
         });
 
         return deferred.promise;
