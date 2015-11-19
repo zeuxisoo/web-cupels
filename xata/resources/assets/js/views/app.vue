@@ -19,4 +19,7 @@ export default {
 </script>
 
 <style>
+body {
+    margin-bottom: 10px;
+}
 </style>
