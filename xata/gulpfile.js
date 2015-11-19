@@ -17,6 +17,12 @@ var devtools = '#source-map';
 
 if (process.env.NODE_ENV === 'production') {
     plugins = [
+        new webpack.DefinePlugin({
+            "process.env": {
+                "NODE_ENV": JSON.stringify("production")
+            }
+        }),
+        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({
             output: {
                 comments: false
@@ -45,7 +51,7 @@ Elixir.extend('webpack', function(options) {
                     throw new gutil.PluginError("webpack", err);
                 }else{
                     gutil.log("[Webpack]", stats.toString({
-                        // colors: gutil.colors.supportsColor,
+                        colors: true,
                         // hash: false,
                         // timings: false,
                         // chunks: false,
