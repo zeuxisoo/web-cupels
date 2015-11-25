@@ -21,7 +21,7 @@ var styles = StyleSheet.create({
         backgroundColor: '#FAFAFA'
     },
     toolbar: {
-        backgroundColor: '#00a2ed',
+        backgroundColor: '#218693',
         height: 56
     }
 });

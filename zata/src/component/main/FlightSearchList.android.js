@@ -2,6 +2,7 @@
 
 import React, { ListView, StyleSheet, Text, View, AsyncStorage, ToastAndroid } from 'react-native';
 import CenterBlock from '../shared/CenterBlock';
+import FlightSearchCell from './FlightSearchCell';
 import { Flight } from '../../api';
 
 class FlightSearchList extends React.Component {
@@ -69,23 +70,22 @@ class FlightSearchList extends React.Component {
                             ToastAndroid.show(response.message, ToastAndroid.SHORT);
                             break;
                     }
+
+                    this.setState({
+                        isLoading : false
+                    });
                 }else{
                     this.setState({
+                        isLoading : false,
                         dataSource: this.state.dataSource.cloneWithRows(response.data)
                     });
                 }
-
-                this.setState({
-                    isLoading: false
-                });
             })
     }
 
     renderRow(rowData) {
         return (
-            <View>
-                <Text>123</Text>
-            </View>
+            <FlightSearchCell flight={rowData} />
         )
     }
 
