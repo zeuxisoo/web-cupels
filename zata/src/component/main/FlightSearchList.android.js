@@ -17,6 +17,8 @@ class FlightSearchList extends React.Component {
         this.state = {
             isLoading: false,
             isLoadingTail: false,
+            data: [],
+            pagination: {},
             dataSource: dataSource
         };
     }
@@ -53,6 +55,7 @@ class FlightSearchList extends React.Component {
 
         Flight
             .fetchAll({
+                page : page,
                 price: price
             })
             .then((response) => {
@@ -75,9 +78,13 @@ class FlightSearchList extends React.Component {
                         isLoading : false
                     });
                 }else{
+                    let data = this.state.data.concat(response.data);
+
                     this.setState({
                         isLoading : false,
-                        dataSource: this.state.dataSource.cloneWithRows(response.data)
+                        data      : data,
+                        pagination: response.meta.pagination,
+                        dataSource: this.state.dataSource.cloneWithRows(data)
                     });
                 }
             })
@@ -90,7 +97,17 @@ class FlightSearchList extends React.Component {
     }
 
     onEndReached() {
+        if (this.state.isLoading === true)  {
+            return;
+        }else{
+            let pagination = this.state.pagination;
 
+            if (pagination.current_page < pagination.total_pages) {
+                this.fetchFlights(pagination.current_page + 1, 100);
+            }else{
+                ToastAndroid.show("No more pages :(", ToastAndroid.SHORT);
+            }
+        }
     }
 
     render() {
@@ -105,7 +122,8 @@ class FlightSearchList extends React.Component {
                     style={styles.listview}
                     dataSource={this.state.dataSource}
                     renderRow={this.renderRow}
-                    onEndReached={this.onEndReached}
+                    onEndReached={this.onEndReached.bind(this)}
+                    onEndReachedThreshold={80}
                     automaticallyAdjustContentInsets={false}
                     keyboardShouldPersistTaps={true}
                     showsVerticalScrollIndicator={false}
