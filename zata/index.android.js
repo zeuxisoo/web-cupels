@@ -4,19 +4,11 @@
  */
 'use strict';
 
-var React = require('react-native');
-var MainView = require('./src/View/MainView.android')
-
-var {
-    AppRegistry,
-    StyleSheet,
-    BackAndroid,
-    Navigator,
-    View
-} = React;
+import React, { AppRegistry, StyleSheet, BackAndroid, Navigator, View } from 'react-native';
+import MainView from './src/View/MainView.android';
 
 var _navigator;
-BackAndroid.addEventListener('hardwareBackPress', function() {
+BackAndroid.addEventListener('hardwareBackPress', () => {
     if (_navigator && _navigator.getCurrentRoutes().length > 1) {
         _navigator.pop();
         return true;
@@ -24,8 +16,11 @@ BackAndroid.addEventListener('hardwareBackPress', function() {
     return false;
 });
 
-var zata = React.createClass({
-    routeMapper: function(route, navigator) {
+class Zata extends React.Component {
+
+    routeMapper(route, navigator) {
+        _navigator = navigator;
+
         if (route.name === 'main') {
             return (
                 <View style={styles.container}>
@@ -33,10 +28,10 @@ var zata = React.createClass({
                 </View>
             );
         }
-    },
+    }
 
-    render: function() {
-        var initialRoute = { name: 'main' };
+    render() {
+        let initialRoute = { name: 'main' };
 
         return (
             <Navigator
@@ -46,7 +41,8 @@ var zata = React.createClass({
               renderScene={this.routeMapper} />
         );
     }
-});
+
+}
 
 var styles = StyleSheet.create({
     container: {
@@ -55,4 +51,4 @@ var styles = StyleSheet.create({
     }
 });
 
-AppRegistry.registerComponent('zata', () => zata);
+AppRegistry.registerComponent('zata', () => Zata);

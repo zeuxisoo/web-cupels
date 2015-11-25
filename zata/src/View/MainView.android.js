@@ -1,18 +1,10 @@
 'use strict';
 
-var React = require('react-native');
-var FlightSearchList = require('../component/main/FlightSearchList.android');
+import React, { StyleSheet, ToolbarAndroid, Text, View } from 'react-native';
+import FlightSearchList from '../component/main/FlightSearchList.android';
 
-var {
-    AppRegistry,
-    StyleSheet,
-    ToolbarAndroid,
-    Text,
-    View,
-} = React;
-
-var MainView = React.createClass({
-    render: function() {
+class MainView extends React.Component {
+    render() {
         return (
             <View style={styles.container}>
                 <ToolbarAndroid title="Zata" titleColor="white" style={styles.toolbar} />
@@ -20,7 +12,7 @@ var MainView = React.createClass({
             </View>
         )
     }
-});
+}
 
 var styles = StyleSheet.create({
     container: {

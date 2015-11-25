@@ -1,45 +1,41 @@
 'use strict';
 
-var React = require('react-native');
-var CenterBlock = require('../shared/CenterBlock');
+import React, { ListView, StyleSheet, Text, View } from 'react-native';
+import CenterBlock from '../shared/CenterBlock';
 
-var {
-    ListView,
-    StyleSheet,
-    Text,
-    View,
-} = React;
+class FlightSearchList extends React.Component {
 
-var FlightSearchList = React.createClass({
-    getInitialState: function() {
+    constructor(props) {
+        super(props);
+
         var dataSource = new ListView.DataSource({
             rowHasChanged: (row1, row2) => row1 !== row2
         });
 
-        return {
+        this.state = {
             isLoading: false,
             isLoadingTail: false,
             dataSource: dataSource
         };
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.fetchFlights(1);
-    },
+    }
 
-    fetchFlights: function(page) {
+    fetchFlights(page) {
         console.log(page);
-    },
+    }
 
-    renderRow: function(rowData) {
+    renderRow(rowData) {
 
-    },
+    }
 
-    onEndReached: function() {
+    onEndReached() {
 
-    },
+    }
 
-    render: function() {
+    render() {
         if (this.state.dataSource.getRowCount() <= 0) {
             return (
                 <CenterBlock text={this.state.isLoading ? 'Loading...' : 'Load failed'} />
@@ -59,7 +55,7 @@ var FlightSearchList = React.createClass({
             );
         }
     }
-});
+}
 
 var styles = StyleSheet.create({
     listview: {
