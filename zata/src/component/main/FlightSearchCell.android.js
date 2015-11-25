@@ -69,13 +69,13 @@ var styles = StyleSheet.create({
         backgroundColor: '#B2E4EA'
     },
     headingLocation: {
-        flex: 10,
+        flex: 9,
         color: '#591C18',
         fontSize: 16,
         fontWeight: 'bold'
     },
     headingPrice: {
-        flex: 2,
+        flex: 3,
         textAlign: 'right'
     },
     body: {
