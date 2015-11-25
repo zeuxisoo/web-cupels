@@ -1,7 +1,8 @@
 'use strict';
 
-import React, { ListView, StyleSheet, Text, View } from 'react-native';
+import React, { ListView, StyleSheet, Text, View, AsyncStorage, ToastAndroid } from 'react-native';
 import CenterBlock from '../shared/CenterBlock';
+import { Flight } from '../../api';
 
 class FlightSearchList extends React.Component {
 
@@ -20,15 +21,72 @@ class FlightSearchList extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchFlights(1);
+        this.fetchAuthToken();
     }
 
-    fetchFlights(page) {
-        console.log(page);
+    fetchAuthToken() {
+        this.setState({
+            isLoading: true
+        });
+
+        Flight
+            .authSign()
+            .then((response) => {
+                if (response) {
+                    AsyncStorage.setItem('auth-token', response.token);
+                }else{
+                    ToastAndroid.show('Cannot fetch the auth token', ToastAndroid.SHORT);
+                }
+
+                this.setState({
+                    isLoading: false
+                });
+            })
+            .then(() => this.fetchFlights(1, 100));
+    }
+
+    fetchFlights(page, price) {
+        this.setState({
+            isLoading: true
+        });
+
+        Flight
+            .fetchAll({
+                price: price
+            })
+            .then((response) => {
+                console.log(response);
+
+                if (response.status_code) {
+                    switch(response.status_code) {
+                        case 422:
+                            Object.keys(response.errors).forEach((name) => {
+                                ToastAndroid.show(response.errors[name].shift(), ToastAndroid.LONG);
+                                return;
+                            });
+                            break;
+                        default:
+                            ToastAndroid.show(response.message, ToastAndroid.SHORT);
+                            break;
+                    }
+                }else{
+                    this.setState({
+                        dataSource: this.state.dataSource.cloneWithRows(response.data)
+                    });
+                }
+
+                this.setState({
+                    isLoading: false
+                });
+            })
     }
 
     renderRow(rowData) {
-
+        return (
+            <View>
+                <Text>123</Text>
+            </View>
+        )
     }
 
     onEndReached() {
