@@ -5,7 +5,7 @@
 'use strict';
 
 import React, { AppRegistry, StyleSheet, BackAndroid, Navigator, View } from 'react-native';
-import MainView from './src/View/MainView.android';
+import MainView from './src/view/MainView.android';
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
