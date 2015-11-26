@@ -1,9 +1,12 @@
 'use strict';
 
-import React, { ListView, StyleSheet, Text, View, AsyncStorage, ToastAndroid } from 'react-native';
+import React, { ListView, StyleSheet, Text, View, TextInput, AsyncStorage, ToastAndroid } from 'react-native';
 import CenterBlock from '../shared/CenterBlock';
 import FlightSearchCell from './FlightSearchCell';
 import { Flight } from '../../api';
+
+var TEXT_INPUT_PRICE  = 'text_input_price';
+var LIST_VIEW_FLIGHTS = 'list_view_flights';
 
 class FlightSearchList extends React.Component {
 
@@ -17,6 +20,7 @@ class FlightSearchList extends React.Component {
         this.state = {
             isLoading: false,
             isLoadingTail: false,
+            price: 100,
             data: [],
             pagination: {},
             dataSource: dataSource
@@ -45,7 +49,7 @@ class FlightSearchList extends React.Component {
                     isLoading: false
                 });
             })
-            .then(() => this.fetchFlights(1, 100));
+            .then(() => this.fetchFlights(1, this.state.price));
     }
 
     fetchFlights(page, price) {
@@ -78,7 +82,7 @@ class FlightSearchList extends React.Component {
                         isLoading : false
                     });
                 }else{
-                    let data = this.state.data.concat(response.data);
+                    let data = (page <= 1) ? response.data : this.state.data.concat(response.data);
 
                     this.setState({
                         isLoading : false,
@@ -86,6 +90,12 @@ class FlightSearchList extends React.Component {
                         pagination: response.meta.pagination,
                         dataSource: this.state.dataSource.cloneWithRows(data)
                     });
+
+                    if (page <= 1) {
+                        requestAnimationFrame(() => {
+                            this.refs[LIST_VIEW_FLIGHTS].getScrollResponder().scrollTo(0);
+                        });
+                    }
                 }
             })
     }
@@ -103,10 +113,31 @@ class FlightSearchList extends React.Component {
             let pagination = this.state.pagination;
 
             if (pagination.current_page < pagination.total_pages) {
-                this.fetchFlights(pagination.current_page + 1, 100);
+                this.fetchFlights(pagination.current_page + 1, this.state.price);
             }else{
                 ToastAndroid.show("No more pages :(", ToastAndroid.SHORT);
             }
+        }
+    }
+
+    onChangeText(text) {
+        this.setState({
+            price: text
+        });
+    }
+
+    onSubmitEditing(event) {
+        let price = event.nativeEvent.text;
+
+        if (price.length > 0) {
+            ToastAndroid.show("Searching...", ToastAndroid.SHORT);
+
+            this.setState({
+                price: price
+            });
+
+            this.fetchFlights(1, price);
+            this.refs[TEXT_INPUT_PRICE].blur();
         }
     }
 
@@ -117,23 +148,40 @@ class FlightSearchList extends React.Component {
             )
         }else{
             return (
-                <ListView
-                    ref="listview"
-                    style={styles.listview}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow}
-                    onEndReached={this.onEndReached.bind(this)}
-                    onEndReachedThreshold={80}
-                    automaticallyAdjustContentInsets={false}
-                    keyboardShouldPersistTaps={true}
-                    showsVerticalScrollIndicator={false}
-                    keyboardDismissMode="on-drag" />
+                <View style={styles.container}>
+                    <View>
+                        <TextInput
+                            ref={TEXT_INPUT_PRICE}
+                            placeholder="Enter price to search"
+                            placeholderTextColor="#c9bdf2"
+                            keyboardType="numeric"
+                            returnKeyType="search"
+                            value={this.state.price}
+                            onChangeText={this.onChangeText.bind(this)}
+                            onSubmitEditing={this.onSubmitEditing.bind(this)} />
+                    </View>
+                    <ListView
+                        ref={LIST_VIEW_FLIGHTS}
+                        style={styles.listview}
+                        dataSource={this.state.dataSource}
+                        renderRow={this.renderRow}
+                        onEndReached={this.onEndReached.bind(this)}
+                        onEndReachedThreshold={80}
+                        automaticallyAdjustContentInsets={false}
+                        keyboardShouldPersistTaps={true}
+                        showsVerticalScrollIndicator={false}
+                        keyboardDismissMode="on-drag" />
+                </View>
             );
         }
     }
 }
 
 var styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'column'
+    },
     listview: {
 
     }
