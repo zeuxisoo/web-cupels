@@ -141,6 +141,15 @@ class FlightSearchList extends React.Component {
         }
     }
 
+    onPressClear() {
+        this.setState({
+            price: 100
+        });
+
+        this.fetchFlights(1, this.state.price);
+        this.refs[TEXT_INPUT_PRICE].blur();
+    }
+
     render() {
         if (this.state.dataSource.getRowCount() <= 0) {
             return (
@@ -149,7 +158,7 @@ class FlightSearchList extends React.Component {
         }else{
             return (
                 <View style={styles.container}>
-                    <View>
+                    <View style={styles.search}>
                         <TextInput
                             ref={TEXT_INPUT_PRICE}
                             placeholder="Enter price to search"
@@ -158,7 +167,11 @@ class FlightSearchList extends React.Component {
                             returnKeyType="search"
                             value={this.state.price}
                             onChangeText={this.onChangeText.bind(this)}
-                            onSubmitEditing={this.onSubmitEditing.bind(this)} />
+                            onSubmitEditing={this.onSubmitEditing.bind(this)}
+                            style={styles.searchPrice} />
+                        <View style={styles.searchClear}>
+                            <Text style={styles.searchClearText} onPress={this.onPressClear.bind(this)}>Clear</Text>
+                        </View>
                     </View>
                     <ListView
                         ref={LIST_VIEW_FLIGHTS}
@@ -181,6 +194,25 @@ var styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column'
+    },
+    search: {
+        flexDirection: 'row'
+    },
+    searchPrice: {
+        flex: 10
+    },
+    searchClear: {
+        flex: 2,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 8,
+        marginRight: 5,
+        borderWidth: 1,
+        borderColor: '#B2E4EA'
+    },
+    searchClearText: {
+        color: '#591C18'
     },
     listview: {
 
