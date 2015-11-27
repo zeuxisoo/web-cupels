@@ -1,8 +1,8 @@
 'use strict';
 
-import React, { ListView, StyleSheet, Text, View, TextInput, AsyncStorage, ToastAndroid } from 'react-native';
+import React, { ListView, StyleSheet, Text, View, TextInput, AsyncStorage } from 'react-native';
 import CenterBlock from '../shared/CenterBlock';
-import FlightSearchCell from './FlightSearchCell.android';
+import FlightSearchCell from './FlightSearchCell.ios';
 import { Flight } from '../../api';
 
 var TEXT_INPUT_PRICE  = 'text_input_price';
@@ -42,7 +42,7 @@ class FlightSearchList extends React.Component {
                 if (response) {
                     AsyncStorage.setItem('auth-token', response.token);
                 }else{
-                    ToastAndroid.show('Cannot fetch the auth token', ToastAndroid.SHORT);
+                    // ToastAndroid.show('Cannot fetch the auth token', ToastAndroid.SHORT);
                 }
 
                 this.setState({
@@ -69,12 +69,12 @@ class FlightSearchList extends React.Component {
                     switch(response.status_code) {
                         case 422:
                             Object.keys(response.errors).forEach((name) => {
-                                ToastAndroid.show(response.errors[name].shift(), ToastAndroid.LONG);
+                                // ToastAndroid.show(response.errors[name].shift(), ToastAndroid.LONG);
                                 return;
                             });
                             break;
                         default:
-                            ToastAndroid.show(response.message, ToastAndroid.SHORT);
+                            // ToastAndroid.show(response.message, ToastAndroid.SHORT);
                             break;
                     }
 
@@ -100,7 +100,7 @@ class FlightSearchList extends React.Component {
             })
     }
 
-    renderRow(rowData) {
+    renderRow(rowData, sectionID, rowID, highlightRow) {
         return (
             <FlightSearchCell flight={rowData} />
         )
@@ -115,7 +115,7 @@ class FlightSearchList extends React.Component {
             if (pagination.current_page < pagination.total_pages) {
                 this.fetchFlights(pagination.current_page + 1, this.state.price);
             }else{
-                ToastAndroid.show("No more pages :(", ToastAndroid.SHORT);
+                // ToastAndroid.show("No more pages :(", ToastAndroid.SHORT);
             }
         }
     }
@@ -130,7 +130,7 @@ class FlightSearchList extends React.Component {
         let price = event.nativeEvent.text;
 
         if (price.length > 0) {
-            ToastAndroid.show("Searching...", ToastAndroid.SHORT);
+            // ToastAndroid.show("Searching...", ToastAndroid.SHORT);
 
             this.setState({
                 price: price
@@ -196,18 +196,22 @@ var styles = StyleSheet.create({
         flexDirection: 'column'
     },
     search: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginLeft: 5,
+        marginRight: 5
     },
     searchPrice: {
-        flex: 10
+        flex: 10,
+        padding: 5,
+        marginRight: 5,
+        borderWidth: 1,
+        borderColor: '#B2E4EA'
     },
     searchClear: {
         flex: 2,
         height: 40,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 8,
-        marginRight: 5,
         borderWidth: 1,
         borderColor: '#B2E4EA'
     },

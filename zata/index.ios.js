@@ -4,50 +4,42 @@
  */
 'use strict';
 
-var React = require('react-native');
-var {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-} = React;
+import React, { AppRegistry, StyleSheet, Navigator, View } from 'react-native';
+import MainView from './src/view/MainView.ios';
 
-var zata = React.createClass({
-  render: function() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
-  }
-});
+class Zata extends React.Component {
+
+    routeMapper(route, navigator) {
+        _navigator = navigator;
+
+        if (route.name === 'main') {
+            return (
+                <View style={styles.container}>
+                    <MainView navigator={navigator} />
+                </View>
+            );
+        }
+    }
+
+    render() {
+        let initialRoute = { name: 'main' };
+
+        return (
+            <Navigator
+              style={styles.container}
+              initialRoute={initialRoute}
+              configureScene={() => Navigator.SceneConfigs.FloatFromRight}
+              renderScene={this.routeMapper} />
+        );
+    }
+
+}
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+    }
 });
 
-AppRegistry.registerComponent('zata', () => zata);
+AppRegistry.registerComponent('zata', () => Zata);
