@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native'
 export default class Api {
 
     url(uri, params) {
-        let endpoint = "http://10.0.1.14:8000/api/v1" + uri;
+        let endpoint = "http://xata.zeuik.com/api/v1" + uri;
 
         if (params) {
             endpoint = endpoint + "?" + JSON.stringify(params);
