@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { ListView, StyleSheet, Text, View, TextInput, AsyncStorage } from 'react-native';
+import Toast from 'react-native-toast';
 import CenterBlock from '../shared/CenterBlock';
 import FlightSearchCell from './FlightSearchCell.ios';
 import { Flight } from '../../api';
@@ -42,7 +43,7 @@ class FlightSearchList extends React.Component {
                 if (response) {
                     AsyncStorage.setItem('auth-token', response.token);
                 }else{
-                    // ToastAndroid.show('Cannot fetch the auth token', ToastAndroid.SHORT);
+                    Toast.show('Cannot fetch the auth token');
                 }
 
                 this.setState({
@@ -69,12 +70,12 @@ class FlightSearchList extends React.Component {
                     switch(response.status_code) {
                         case 422:
                             Object.keys(response.errors).forEach((name) => {
-                                // ToastAndroid.show(response.errors[name].shift(), ToastAndroid.LONG);
+                                Toast.show(response.errors[name].shift());
                                 return;
                             });
                             break;
                         default:
-                            // ToastAndroid.show(response.message, ToastAndroid.SHORT);
+                            Toast.show(response.message);
                             break;
                     }
 
@@ -115,7 +116,7 @@ class FlightSearchList extends React.Component {
             if (pagination.current_page < pagination.total_pages) {
                 this.fetchFlights(pagination.current_page + 1, this.state.price);
             }else{
-                // ToastAndroid.show("No more pages :(", ToastAndroid.SHORT);
+                Toast.show("No more pages :(");
             }
         }
     }
@@ -130,7 +131,7 @@ class FlightSearchList extends React.Component {
         let price = event.nativeEvent.text;
 
         if (price.length > 0) {
-            // ToastAndroid.show("Searching...", ToastAndroid.SHORT);
+            Toast.show("Searching...");
 
             this.setState({
                 price: price
