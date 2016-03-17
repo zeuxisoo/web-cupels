@@ -91,10 +91,22 @@ class FlightSearchList extends React.Component {
                         dataSource: this.state.dataSource.cloneWithRows(data)
                     });
 
-                    if (page <= 1) {
-                        requestAnimationFrame(() => {
-                            this.refs[LIST_VIEW_FLIGHTS].getScrollResponder().scrollTo(0);
-                        });
+                    if (data.length > 0) {
+                        if (page <= 1) {
+                            requestAnimationFrame(() => {
+                                this.refs[LIST_VIEW_FLIGHTS].getScrollResponder().scrollTo(0);
+                            });
+                        }
+                    }else{
+                        ToastAndroid.show("No found record with price: " + price, ToastAndroid.SHORT);
+
+                        setTimeout(() => {
+                            this.setState({
+                                price: 100
+                            });
+
+                            this.fetchAuthToken();
+                        }, 2500);
                     }
                 }
             })
