@@ -14,19 +14,14 @@ export default class Api {
 
     async promisePost(uri, data) {
         let token = await AsyncStorage.getItem('auth-token');
-
-        console.group("Api.promisePost");
-        console.log(this.url(uri));
-        console.log(token);
-        console.log(data);
-        console.groupEnd();
+        let url   = this.url(uri);
 
         if (Object.prototype.toString.call(data) === "[object Undefined]") {
             data = {};
         }
 
         return new Promise((resolve, reject) => {
-            fetch(this.url(uri), {
+            fetch(url, {
                 method: "POST",
                 headers: {
                     'Accept'       : 'application/json',
@@ -40,8 +35,6 @@ export default class Api {
                 resolve(responseJSON);
             })
             .catch((error) => {
-                console.log(`promisePost error : ${error}`);
-
                 resolve(null);
             });
         })

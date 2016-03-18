@@ -3,10 +3,12 @@
 import React, { ListView, StyleSheet, Text, View, TextInput, AsyncStorage, ToastAndroid } from 'react-native';
 import CenterBlock from '../shared/CenterBlock';
 import FlightSearchCell from './FlightSearchCell.android';
-import { Flight } from '../../api';
+import Api from '../../api';
 
 var TEXT_INPUT_PRICE  = 'text_input_price';
 var LIST_VIEW_FLIGHTS = 'list_view_flights';
+
+var { Flight } = Api;
 
 class FlightSearchList extends React.Component {
 
@@ -20,7 +22,7 @@ class FlightSearchList extends React.Component {
         this.state = {
             isLoading: false,
             isLoadingTail: false,
-            price: 100,
+            price: "100",
             data: [],
             pagination: {},
             dataSource: dataSource
@@ -63,8 +65,6 @@ class FlightSearchList extends React.Component {
                 price: price
             })
             .then((response) => {
-                console.log(response);
-
                 if (response.status_code) {
                     switch(response.status_code) {
                         case 422:
@@ -94,17 +94,22 @@ class FlightSearchList extends React.Component {
                     if (data.length > 0) {
                         if (page <= 1) {
                             requestAnimationFrame(() => {
-                                this.refs[LIST_VIEW_FLIGHTS].getScrollResponder().scrollTo(0);
+                                this.refs[LIST_VIEW_FLIGHTS].getScrollResponder().scrollTo({
+                                    x: 0,
+                                    y: 0,
+                                    animated: true
+                                });
                             });
                         }
                     }else{
+                        this.setState({
+                            isLoading: true,
+                            price    : "100"
+                        });
+
                         ToastAndroid.show("No found record with price: " + price, ToastAndroid.SHORT);
 
                         setTimeout(() => {
-                            this.setState({
-                                price: 100
-                            });
-
                             this.fetchAuthToken();
                         }, 2500);
                     }
@@ -113,9 +118,7 @@ class FlightSearchList extends React.Component {
     }
 
     renderRow(rowData) {
-        return (
-            <FlightSearchCell flight={rowData} />
-        )
+        return <FlightSearchCell flight={rowData} />
     }
 
     onEndReached() {

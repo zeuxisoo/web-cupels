@@ -4,10 +4,12 @@ import React, { ListView, StyleSheet, Text, View, TextInput, AsyncStorage } from
 import Toast from 'react-native-toast';
 import CenterBlock from '../shared/CenterBlock';
 import FlightSearchCell from './FlightSearchCell.ios';
-import { Flight } from '../../api';
+import Api from '../../api';
 
 var TEXT_INPUT_PRICE  = 'text_input_price';
 var LIST_VIEW_FLIGHTS = 'list_view_flights';
+
+var { Flight } = Api;
 
 class FlightSearchList extends React.Component {
 
@@ -64,8 +66,6 @@ class FlightSearchList extends React.Component {
                 price: price
             })
             .then((response) => {
-                console.log(response);
-
                 if (response.status_code) {
                     switch(response.status_code) {
                         case 422:
