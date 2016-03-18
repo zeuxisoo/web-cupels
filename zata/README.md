@@ -25,3 +25,42 @@
 **In iOS**
 
     open `ios/zata.xcodeproj` and click run button
+
+## Release
+
+**In Android**
+
+Generate key if first release
+
+    KEY_STORE=/path/to/keystore make generate-key
+
+Setup the global gradle properties if first release
+
+    vim ~/.gradle/gradle.properties
+
+        WEB_CUPELS_ZATA_RELEASE_STORE_FILE=/path/to/keystore
+        WEB_CUPELS_ZATA_RELEASE_KEY_ALIAS=web-cupels-zata
+        WEB_CUPELS_ZATA_RELEASE_STORE_PASSWORD=*****
+        WEB_CUPELS_ZATA_RELEASE_KEY_PASSWORD=*****
+
+Edit the gradle build script if first release
+
+    vim ./android/app/build.gradle
+
+        signingConfigs {
+            release {
+                storeFile file(WEB_CUPELS_ZATA_RELEASE_STORE_FILE)
+                storePassword WEB_CUPELS_ZATA_RELEASE_STORE_PASSWORD
+                keyAlias WEB_CUPELS_ZATA_RELEASE_KEY_ALIAS
+                keyPassword WEB_CUPELS_ZATA_RELEASE_KEY_PASSWORD
+            }
+        }
+
+        buildTypes {
+            release {
+                ...
+                signingConfig signingConfigs.release
+                ...
+            }
+        }
+
